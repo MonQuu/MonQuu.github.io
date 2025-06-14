@@ -3,49 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Text Input</title>
+    <title>Local JSON Saver</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
-        textarea { width: 100%; height: 150px; margin: 10px 0; padding: 8px; }
-        button { background: #4CAF50; color: white; padding: 10px 15px; border: none; cursor: pointer; }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin: 10px 0;
+            padding: 8px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+        }
+        #status {
+            margin-top: 10px;
+            color: green;
+        }
     </style>
 </head>
 <body>
-    <h1>Secure Text Input</h1>
-    <textarea id="userText" placeholder="Enter sensitive text here..."></textarea>
-    <button onclick="processText()">Submit Securely</button>
-    
-    <script>
-        function processText() {
-            const text = document.getElementById('userText').value.trim();
-            if (!text) return alert("Please enter text");
-            
-            // Simple obfuscation (not real encryption)
-            const obfuscated = btoa(unescape(encodeURIComponent(
-                JSON.stringify({
-                    data: text,
-                    timestamp: Date.now(),
-                    salt: Math.random().toString(36).substring(2)
-                })
-            ));
-            
-            // Create hidden download (user won't see this)
-            const blob = new Blob([obfuscated], {type: 'text/plain'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'data.bin'; // Generic filename
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-            
-            // Clean up
-            setTimeout(() => {
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                alert("Data processed securely");
-            }, 100);
-        }
-    </script>
+    <h1>Save to tg/keys.json</h1>
+    <textarea id="userInput" placeholder="Enter text to save..."></textarea>
+    <button id="saveBtn">Save to tg/keys.json</button>
+    <div id="status"></div>
+
+    <script src="app.js"></script>
 </body>
 </html>
